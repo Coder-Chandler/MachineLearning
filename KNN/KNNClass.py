@@ -28,6 +28,14 @@ def train_test_split(X, y, test_ratio=0.2, seed=None):
     return X_train, X_test, y_train, y_test
 
 
+def accuracy_score(y_true, y_predict):
+    """计算y_true和y_predict之间的准确率"""
+    assert len(y_true) == len(y_predict), \
+        "the size of y_true must be equal to the size of y_predict"
+
+    return np.sum(y_true == y_predict) / len(y_true)
+
+
 # 建立KNNClassifier类
 class KNNClassifier:
     """初始化kNN分类器"""
@@ -83,6 +91,12 @@ class KNNClassifier:
         votes = Counter(topK_y)
         # 对前k个类别投票得到最后预测结果的array
         return votes.most_common(1)[0][0]
+
+    def score(self, X_test, y_test):
+        """根据测试数据集 X_test 和 y_test 确定当前模型的准确度"""
+
+        y_predict = self.predict(X_test)
+        return accuracy_score(y_test, y_predict)
 
     # 调用fit函数返回self本身的时候打印k的个数
     def __repr__(self):
