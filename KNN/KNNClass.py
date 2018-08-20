@@ -47,7 +47,7 @@ class KNNClassifier:
         self.k = k
         self._X_train = None
         self._y_train = None
-        self.method = 'distance'
+        # self.method = 'distance'
         self.p = 2
 
     # 这个fit过程其实比较简单，首先建立私有的_X_train，_y_train初始值为None
@@ -90,20 +90,11 @@ class KNNClassifier:
         # 得到计算好的distance列表按照距离大小升序排列后对应的索引在之前列表中的位置
         nearest = np.argsort(distances)
         method = self.method
-        if method == 'uniform':
-            # 将前k个索引带入_Y_train中得到对应的类别
-            topK_y = [self._y_train[i] for i in nearest[:self.k]]
-            votes = Counter(topK_y)
-            # 对前k个类别投票得到最后预测结果的array
-            return votes.most_common(1)[0][0]
-        elif method == 'distance':
-            topK_dis = {}
-            topK_y = [self._y_train[i] for i in nearest[:self.k]]
-            topK_x = [self.distances[i] for i in nearest[:self.k]]
-
-            for i in topK_y:
-                topK_dis[i] = topK_x[i]
-                print(topK_dis)
+        # 将前k个索引带入_Y_train中得到对应的类别
+        topK_y = [self._y_train[i] for i in nearest[:self.k]]
+        votes = Counter(topK_y)
+        # 对前k个类别投票得到最后预测结果的array
+        return votes.most_common(1)[0][0]
 
     def score(self, X_test, y_test):
         """根据测试数据集 X_test 和 y_test 确定当前模型的准确度"""
